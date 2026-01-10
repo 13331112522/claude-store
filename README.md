@@ -14,6 +14,7 @@ This collection focuses on practical techniques for:
 - **Custom Commands**: Slash commands that extend Claude's capabilities
 - **Specialized Skills**: Domain-specific expertise and workflows
 - **Prompt Engineering**: Techniques for getting the best results from Claude
+- **claude-mem Extensions**: Tools for extending Claude's persistent memory capabilities
 
 ## Usage
 
@@ -47,6 +48,38 @@ Use the Skill tool to invoke a skill by name
 
 Skills are designed for domain-specific tasks like document processing, data analysis, or specialized content creation.
 
+### claude-mem Extensions
+
+The `claude-mem-extension/` directory contains tools that extend [claude-mem](https://github.com/thedotmack/claude-mem) - the persistent memory system for Claude Code.
+
+#### skill-generator
+
+A TypeScript-based tool that automatically transforms your conversation history into reusable Claude Code skills.
+
+**What it does:**
+- Searches your claude-mem stored conversations for valuable patterns
+- Scores and ranks candidates by type weight and work investment
+- Extracts core problems, solutions, and best practices
+- Generates standardized skill files with YAML frontmatter
+- Provides interactive review workflow before saving
+
+**Quick start:**
+```bash
+cd claude-mem-extension/skills/skill-generator
+npm install
+npm run build
+./install.sh
+```
+
+**Usage in Claude Code:**
+```
+/claude-mem:skill-generator
+```
+
+Invoke this slash command anytime you want to generate skills based on your Claude Code usage history.
+
+**Generated skills are saved to:** `~/.claude/skills/experiences/`
+
 ## Philosophy
 
 The techniques shared here are grounded in real-world usage. Each pattern, command, or skill has been developed and refined through actual work, not theoretical exploration.
@@ -63,4 +96,4 @@ While this is primarily a personal collection, feel free to explore, adapt, and 
 
 ---
 
-*Last updated: January 2026*
+*Last updated: January 10, 2026*
