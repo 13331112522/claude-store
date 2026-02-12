@@ -48,6 +48,15 @@ Use the Skill tool to invoke a skill by name
 
 Skills are designed for domain-specific tasks like document processing, data analysis, or specialized content creation.
 
+#### Available Skills
+
+| Skill | Description |
+|-------|-------------|
+| **humanizer-zh** | 去除文本中的 AI 生成痕迹。检测并修复夸大的象征意义、宣传性语言、肤浅分析、AI 词汇等模式，使文字听起来更自然、更像人类书写 |
+| **paper-to-blog** | Transforms academic papers (PDFs) into comprehensive 2000-word blog posts using a multi-agent system with parallel execution, OCR-based figure extraction, cover design, and iterative refinement |
+| **senior-computer-vision** | World-class computer vision skill for image/video processing, object detection, segmentation, and visual AI systems. Expertise in PyTorch, OpenCV, YOLO, SAM, diffusion models, and vision transformers |
+| **video-downloader** | Downloads videos from YouTube and other platforms for offline viewing, editing, or archival. Handles various formats and quality options |
+
 ### claude-mem Extensions
 
 The `claude-mem-extension/` directory contains tools that extend [claude-mem](https://github.com/thedotmack/claude-mem) - the persistent memory system for Claude Code.
@@ -96,4 +105,4 @@ While this is primarily a personal collection, feel free to explore, adapt, and 
 
 ---
 
-*Last updated: January 10, 2026*
+*Last updated: February 12, 2026*
