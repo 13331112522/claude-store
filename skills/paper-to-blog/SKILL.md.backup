@@ -1,0 +1,134 @@
+---
+name: paper-to-blog
+description: This skill transforms academic papers (PDFs) into comprehensive 2000-word blog posts with properly extracted figures and tables. Use this skill when the user wants to convert a research paper into an in-depth blog article that thoroughly explores technical content in flowing prose (not bullet-heavy lists). This skill handles: PDF conversion to markdown, comprehensive blog generation in Chinese (~2000 words), AI-assisted figure/table extraction from PDF pages (not full page renders), and output to the PaperLog directory.
+---
+
+# Paper to Blog
+
+## Overview
+
+Transform academic research papers into comprehensive, in-depth blog articles (~2000 words) that thoroughly explore technical content in flowing prose. This skill handles the complete workflow from PDF to published blog post, including proper image extraction, file management, and strategic image placement.
+
+## When to Use This Skill
+
+Use this skill when:
+- User wants to convert a research paper PDF into a comprehensive blog article (~2000 words)
+- User mentions "paper to blog", "论文转博客", "make a blog from paper"
+- User wants to create an in-depth exploration of academic research in flowing prose
+- User wants to generate Chinese blog content from English papers
+- User wants detailed technical content with minimal bullet points
+
+## Workflow
+
+### Step 1: Convert PDF to Markdown
+
+First, convert the source PDF paper into markdown format using the markdownify MCP tool.
+
+**Action:** Use the `mcp__web_reader__webReader` tool or equivalent markdownify MCP to convert the PDF to markdown. This preserves:
+- Text content
+- Image references
+- Document structure
+
+**Output:** Save the converted markdown to a temporary location or work with it directly in memory.
+
+### Step 2: Generate Blog Article
+
+Using the converted markdown, create a comprehensive blog article following the guidelines in `references/blog-writer-instructions.md`.
+
+**Key Requirements:**
+- Write in **Chinese**
+- Target length: approximately **2000 words**
+- Create a compelling, click-worthy headline
+- Write in **flowing prose**, not listicle format
+- Include 7 structured sections: Introduction, Background & Context, Core Methodology, Key Findings & Results, Implications & Applications, Conclusion
+- Each section should be 200-500 words with substantive, specific content
+- Minimize bullet points (max 1-2 short lists per article)
+- Include specific technical details, numerical data, and concrete examples
+- Balance technical accessibility with intellectual depth
+
+**Action:** Read the markdown content and generate the blog article using the core prompt instructions.
+
+### Step 3: Extract Figures and Tables
+
+**CRITICAL:** Extract actual figures, diagrams, and tables from PDF pages, not full page renders.
+
+**Figure and Table Extraction Principles:**
+
+1. **Render PDF pages as images:**
+   - Use PDF rendering tools (pypdfium2, PyMuPDF) to convert pages to PIL Images
+   - Render at 1.5-2x scale for better quality
+   - Save temporary page renders for analysis
+
+2. **Identify actual figures/tables using visual analysis:**
+   - Use AI vision tools (e.g., `mcp__4_5v_mcp__analyze_image`) to analyze page content
+   - Ask the vision tool to identify: figure type (diagram/table/chart), position, and content
+   - Filter out text blocks - only extract actual visual elements
+
+3. **Extract regions containing figures/tables:**
+   - Based on vision analysis, determine crop coordinates for each visual element
+   - Use PIL to crop the identified regions from the page render
+   - Save with descriptive names (e.g., `fig1_flow_diagram.png`, `table2_results.png`)
+
+4. **Create figures directory:**
+   - Create: `pdf/PaperLog/figures/`
+   - Save extracted figures/tables here (not full page renders)
+
+5. **Update image references** in the blog:
+   - Use relative paths: `![](figures/filename.png)`
+   - Only include actual figures/diagrams/tables, not full page renders
+
+6. **Strategic placement:**
+   - Place flow diagrams near introduction/background
+   - Include architecture diagrams in methodology section
+   - Add result tables/charts in findings section
+   - **Remove full page image references** - only use extracted figures
+
+### Step 4: Save to PaperLog Directory
+
+Save the final blog article as a markdown file in the `pdf/PaperLog/` directory.
+
+**Filename Pattern:** Use a descriptive name based on the paper's title or main topic.
+
+## Resources
+
+### references/blog-writer-instructions.md
+
+Contains the detailed writing prompt and style guidelines for creating comprehensive 2000-word blog posts. Reference this when generating the blog article to ensure consistent quality and style.
+
+**Key sections:**
+- Core prompt for comprehensive blog generation
+- Writing style requirements (Chinese, flowing prose, ~2000 words)
+- 7-section structure with word count targets
+- Content guidelines for substantive, specific writing
+- Minimal bullet points requirement
+- Detailed image extraction and handling process
+
+## Example Usage
+
+**User says:** "Turn this SAM3 paper into a blog post"
+
+**Workflow:**
+1. Convert SAM3 PDF to markdown using markdownify MCP
+2. Read the converted markdown content
+3. Generate comprehensive 2000-word blog article following the writing instructions
+4. Render PDF pages as images using pypdfium2/PyMuPDF
+5. Use AI vision analysis (`mcp__4_5v_mcp__analyze_image`) to identify figures/tables on each page
+6. Extract identified visual regions and save to `pdf/PaperLog/figures/`
+7. Update image references in blog to use `![](figures/filename.png)`
+8. Remove full page image references
+9. Save to `pdf/PaperLog/SAM3_的技术革命：统一视觉模型如何重塑监控视频理解.md`
+
+## Output Format
+
+The final output should be a well-structured markdown file containing:
+- Compelling Chinese headline
+- 7 structured sections with flowing prose (~2000 words total)
+- Introduction (200-300 words)
+- Background & Context (250-350 words)
+- Core Methodology (400-500 words)
+- Key Findings & Results (400-500 words)
+- Implications & Applications (250-350 words)
+- Conclusion (150-200 words)
+- Minimal bullet points (max 1-2 short lists)
+- Actual extracted figures/tables with `![](figures/filename.png)` paths
+- Substantive, specific content throughout

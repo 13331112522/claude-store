@@ -1,0 +1,9 @@
+.worktrees/
+
+# Paper-to-blog output files (keep structure, ignore content)
+pdf/PaperLog/*.md
+pdf/PaperLog/figures/*.png
+pdf/PaperLog/figures/*.jpg
+pdf/PaperLog/figures_metadata.json
+pdf/PaperLog/checkpoints/*.md
+pdf/PaperLog/checkpoints/feedback/*.txt

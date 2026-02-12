@@ -1,0 +1,15 @@
+[
+  {
+    "filename": "fig1_transformer_architecture.png",
+    "type": "diagram",
+    "number": 1,
+    "page": 3,
+    "description": "Transformer model architecture showing encoder and decoder components",
+    "bbox": {
+      "top": 8,
+      "left": 32,
+      "bottom": 51,
+      "right": 68
+    }
+  }
+]
