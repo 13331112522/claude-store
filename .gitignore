@@ -11,9 +11,18 @@ dist/
 *.js.map
 *.d.ts
 
+# Secrets and credentials
+*.env
+.env.*
+*_credentials*
+*_secret*
+
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
+
+# Exclude promo tweet from repo
+promo-tweet.md

@@ -1,0 +1,16 @@
+# Credentials
+.volc_credentials.env
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+
+# Generated files
+paper-podcast-*.mp3
+paper-podcast-*.md
+paper-podcast-*.png
+!SKILL.md

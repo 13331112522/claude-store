@@ -52,10 +52,16 @@ Skills are designed for domain-specific tasks like document processing, data ana
 
 | Skill | Description |
 |-------|-------------|
+| **ai-daily-digest** | Fetches RSS feeds from 90+ top Hacker News sources, uses Gemini (primary) or OpenAI-compatible APIs to generate a daily AI/tech digest report with configurable sources and bilingual support |
+| **baoyu-article-illustrator** | Analyzes article structure, identifies key paragraphs, and generates AI illustrations in multiple styles (editorial, watercolor, sketch, minimal, etc.) with batch strategy and error handling |
 | **humanizer-zh** | 去除文本中的 AI 生成痕迹。检测并修复夸大的象征意义、宣传性语言、肤浅分析、AI 词汇等模式，使文字听起来更自然、更像人类书写 |
+| **knowledge-base-builder** | Implements Andrej Karpathy's viral "LLM Wiki" architecture — turns your Obsidian vault into a self-compiling knowledge engine. LLM acts as a "knowledge incremental compiler": dump raw materials (papers, articles, transcripts) into `raw/`, run Ingest to compile structured wiki pages with bidirectional links, Query to retrieve with source citations, and Lint to health-check. Deeply integrated with Obsidian CLI for indexed search, backlink analysis, automatic wikilink rewriting, and orphan detection — capabilities impossible with plain file I/O. One-command init, graceful CLI fallback, multi-vault support |
+| **obsidian-cli** | Obsidian vault CLI integration — vault health checks, command reference, and vault management utilities |
 | **paper-to-blog** | Transforms academic papers (PDFs) into comprehensive 2000-word blog posts using a multi-agent system with parallel execution, OCR-based figure extraction, cover design, and iterative refinement |
+| **self-improving-agent** | Self-improving agent pattern with pre-tool, post-bash, and session-end hooks for continuous learning and behavior refinement |
 | **senior-computer-vision** | World-class computer vision skill for image/video processing, object detection, segmentation, and visual AI systems. Expertise in PyTorch, OpenCV, YOLO, SAM, diffusion models, and vision transformers |
 | **video-downloader** | Downloads videos from YouTube and other platforms for offline viewing, editing, or archival. Handles various formats and quality options |
+| **volcengine-podcast-tts** | Volcengine podcast TTS integration — protocol client for converting text scripts to podcast audio using Volcengine's TTS API with speaker diarization support |
 
 ### claude-mem Extensions
 
@@ -105,4 +111,4 @@ While this is primarily a personal collection, feel free to explore, adapt, and 
 
 ---
 
-*Last updated: February 12, 2026*
+*Last updated: April 8, 2026*
