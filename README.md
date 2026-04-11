@@ -53,13 +53,16 @@ Skills are designed for domain-specific tasks like document processing, data ana
 | Skill | Description |
 |-------|-------------|
 | **ai-daily-digest** | Fetches RSS feeds from 90+ top Hacker News sources, uses Gemini (primary) or OpenAI-compatible APIs to generate a daily AI/tech digest report with configurable sources and bilingual support |
+| **akshare** | 使用 AKShare Python 库查询中国股票数据。支持 A 股、港股、美股实时行情、历史 K 线、财务报表、资金流向、龙虎榜、融资融券等数据查询 |
 | **baoyu-article-illustrator** | Analyzes article structure, identifies key paragraphs, and generates AI illustrations in multiple styles (editorial, watercolor, sketch, minimal, etc.) with batch strategy and error handling |
 | **humanizer-zh** | 去除文本中的 AI 生成痕迹。检测并修复夸大的象征意义、宣传性语言、肤浅分析、AI 词汇等模式，使文字听起来更自然、更像人类书写 |
+| **investment-advisor** | 基于段永平价值投资哲学的个人投资顾问。融合投资学习资料、仓位管理、估值模型和 Dalio 宏观周期框架的实战投资知识体系。支持公司分析、买卖决策、仓位管理、估值判断等 |
 | **knowledge-base-builder** | Implements Andrej Karpathy's viral "LLM Wiki" architecture — turns your Obsidian vault into a self-compiling knowledge engine. LLM acts as a "knowledge incremental compiler": dump raw materials (papers, articles, transcripts) into `raw/`, run Ingest to compile structured wiki pages with bidirectional links, Query to retrieve with source citations, and Lint to health-check. Deeply integrated with Obsidian CLI for indexed search, backlink analysis, automatic wikilink rewriting, and orphan detection — capabilities impossible with plain file I/O. One-command init, graceful CLI fallback, multi-vault support |
 | **obsidian-cli** | Obsidian vault CLI integration — vault health checks, command reference, and vault management utilities |
 | **paper-to-blog** | Transforms academic papers (PDFs) into comprehensive 2000-word blog posts using a multi-agent system with parallel execution, OCR-based figure extraction, cover design, and iterative refinement |
 | **self-improving-agent** | Self-improving agent pattern with pre-tool, post-bash, and session-end hooks for continuous learning and behavior refinement |
 | **senior-computer-vision** | World-class computer vision skill for image/video processing, object detection, segmentation, and visual AI systems. Expertise in PyTorch, OpenCV, YOLO, SAM, diffusion models, and vision transformers |
+| **vibe-trading** | AI-powered multi-agent finance workspace with backtesting, strategy generation, and portfolio analysis across global markets (A-shares, HK/US equities, crypto). Supports 64 finance skills, 29 agent swarm presets, technical analysis, quant research, and derivatives pricing |
 | **video-downloader** | Downloads videos from YouTube and other platforms for offline viewing, editing, or archival. Handles various formats and quality options |
 | **volcengine-podcast-tts** | Volcengine podcast TTS integration — protocol client for converting text scripts to podcast audio using Volcengine's TTS API with speaker diarization support |
 
