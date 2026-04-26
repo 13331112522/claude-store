@@ -65,10 +65,89 @@ Skills are designed for domain-specific tasks like document processing, data ana
 | **vibe-trading** | AI-powered multi-agent finance workspace with backtesting, strategy generation, and portfolio analysis across global markets (A-shares, HK/US equities, crypto). Supports 64 finance skills, 29 agent swarm presets, technical analysis, quant research, and derivatives pricing |
 | **video-downloader** | Downloads videos from YouTube and other platforms for offline viewing, editing, or archival. Handles various formats and quality options |
 | **volcengine-podcast-tts** | Volcengine podcast TTS integration — protocol client for converting text scripts to podcast audio using Volcengine's TTS API with speaker diarization support |
+| **html-ppt-editor** | **WYSIWYG editor for guizang-style HTML PPT files** — edit text, add images/text, drag/reposition elements, replace/delete/resize images, delete slides, and save. Perfect for visual editing of magazine-style web presentations |
+| **guizang-ppt-skill** | Generates "electronic magazine × e-ink" style horizontal swipe web PPTs (single HTML file). Features WebGL fluid backgrounds, serif titles + sans-serif body, chapter curtains, data posters, and image grids. Ideal for sharing/demographics/launch-style presentations |
 
 ### claude-mem Extensions
 
 The `claude-mem-extension/` directory contains tools that extend [claude-mem](https://github.com/thedotmack/claude-mem) - the persistent memory system for Claude Code.
+
+## Featured Skills
+
+### HTML PPT Editor
+
+The **html-ppt-editor** skill provides browser-based WYSIWYG editing capabilities for guizang-style HTML presentations. It's perfect when you need to visually edit a PPT without touching code.
+
+#### When to Use
+
+- You have a guizang-format HTML PPT file (single file with `<section class="slide">` and `#deck`)
+- You want to "edit this PPT", "modify text", "replace images", "add images/text", "drag to reposition"
+- You prefer visual editing over manual code changes
+
+#### Workflow
+
+**Step 1: Create an editable version**
+
+The editor script is injected into your HTML file:
+
+```python
+import os
+# Read original HTML
+with open('your-file.html', 'r', encoding='utf-8') as f:
+    html = f.read()
+
+# Read editor script
+editor_js_path = os.path.expanduser('~/.claude/skills/html-ppt-editor/guizang-ppt-editor.js')
+with open(editor_js_path, 'r', encoding='utf-8') as f:
+    js = f.read()
+
+# Inject before </body>
+html = html.replace('</body>', f'<script>\n{js}\n</script>\n</body>')
+
+# Save as editor.html
+output_path = 'editor.html'
+with open(output_path, 'w', encoding='utf-8') as f:
+    f.write(html)
+```
+
+**Step 2: Open in browser**
+
+```bash
+open editor.html
+```
+
+**Step 3: Use the editor**
+
+| Operation | Method |
+|-----------|--------|
+| **Enter/Exit Edit Mode** | Click "Edit" button or press `E` key |
+| **Select Element** | Click on text block or image in edit mode |
+| **Edit Text** | Double-click text block, type directly |
+| **Add Image** | Click "🖼 Add Image" → select image file |
+| **Add Text** | Click "📝 Add Text" → auto enters edit mode |
+| **Drag to Move** | Select → drag blue handle icon (top-left) |
+| **Replace Image** | Select image → Click "📷 Replace" → select new image |
+| **Delete Image** | Select image → Click "🗑 Delete" button |
+| **Resize Image** | Select image → drag corner handles |
+| **Delete Element** | Select → press `Delete` key |
+| **Navigate Slides** | Exit edit, use `←→` keys or bottom dots; use toolbar ◀▶ in edit mode |
+| **Delete Slide** | Click "🗑 Delete Page" in toolbar |
+| **Deselect** | Click blank area or press `Esc` |
+| **Save** | Click "💾 Save" or press `Ctrl+S` → downloads clean HTML |
+
+**Keyboard shortcuts:** `E` (edit) | `←→` (navigate) | `Double-click` (edit text) | `Delete` (remove) | `Ctrl+S` (save) | `Esc` (exit)
+
+**Step 4: After editing**
+
+The save function automatically downloads `index-edited.html` — a clean HTML file without editor code. To continue editing, simply re-inject the editor script.
+
+#### Notes
+
+1. **Only supports guizang format** — HTML must have `#deck` container and `<section class="slide">` elements
+2. **Save downloads a new file** — Browser security prevents overwriting the original file
+3. **Editor doesn't affect original file** — Injection is done on a copy
+4. **Image replacement uses base64** — Replaced images are embedded as base64, file size will increase
+5. **Drag uses transform** — Moved elements use CSS `transform: translate()`, preserved on save
 
 #### skill-generator
 
@@ -114,4 +193,4 @@ While this is primarily a personal collection, feel free to explore, adapt, and 
 
 ---
 
-*Last updated: April 8, 2026*
+*Last updated: April 26, 2026*
