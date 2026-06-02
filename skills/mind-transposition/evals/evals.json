@@ -1,0 +1,23 @@
+{
+  "skill_name": "mind-transposition",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I've been using Claude Code for months and have a bunch of custom skills and CLAUDE.md set up. I just installed OpenClaw and want my new OpenClaw agent to have the same personality and capabilities. Can you help me export from Claude Code and import into OpenClaw? My GitHub username is testuser.",
+      "expected_output": "The skill should detect Claude Code as the source platform, collect all personal files (CLAUDE.md, skills, settings), create a GitHub repo, push the export, then guide the user through importing into OpenClaw with proper file mapping (CLAUDE.md → SOUL.md).",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I want to back up my OpenClaw agent's personality to GitHub. I have SOUL.md, AGENTS.md, MEMORY.md, and a bunch of skills configured. My GitHub repo is myuser/my-agent-backup (private repo already exists).",
+      "expected_output": "The skill should detect OpenClaw, collect SOUL.md, AGENTS.md, USER.md, MEMORY.md, memory/ directory, and skills/, create a manifest.json, and push to the existing GitHub repo. Should warn about any sensitive data in the files.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I just set up a fresh Nanobot instance. My colleague exported their agent personality to GitHub at colleague/team-agent-persona. I want to clone that personality into my new Nanobot. What do I do?",
+      "expected_output": "The skill should detect Nanobot as the target, clone the GitHub repo, read the manifest to identify the source platform, perform cross-platform mapping (e.g., if source was Claude Code, map CLAUDE.md → SOUL.md), and place files in ~/.nanobot/workspace/ with proper backup of any existing files.",
+      "files": []
+    }
+  ]
+}
