@@ -19,10 +19,15 @@ Your agent has a personality — shaped by the skills you've installed, the memo
 
 Mind Transposition is a two-step process:
 
-1. **Export** — Run on the source agent. It collects all personal files (skills, memory, soul, history) and pushes them to a GitHub repository.
-2. **Import** — Run on the target agent. It clones the repository and places files in the correct locations for its platform.
+1. **Export** — Run on the source agent. It collects all personal files (skills, memory, soul, history) and delivers them via:
+   - **GitHub repository** — Push to a private GitHub repo (default, requires gh CLI)
+   - **Local zip file** — Package as a downloadable .zip file
 
-The skill auto-detects which platform it's running on and handles cross-platform file mapping (e.g., Claude Code's `CLAUDE.md` maps to OpenClaw's `SOUL.md`).
+2. **Import** — Run on the target agent. It accepts either:
+   - GitHub repository URL or `owner/repo` identifier
+   - Local zip file path (.zip extension)
+
+The skill auto-detects the source type and platform, handling cross-platform file mapping automatically.
 
 ## Supported Platforms
 
@@ -39,8 +44,8 @@ For detailed platform-specific file locations and cross-platform mapping rules, 
 
 The skill accepts a command argument that determines the mode:
 
-- `/mind-transposition export` — Export this agent's mind to GitHub
-- `/mind-transposition import` — Import a mind from GitHub into this agent
+- `/mind-transposition export` — Export this agent's mind (GitHub or zip)
+- `/mind-transposition import` — Import a mind (auto-detects GitHub or zip)
 - `/mind-transposition status` — Show what personal files exist on this agent and their sizes
 
 If no argument is given, default to showing status and asking which operation the user wants.
@@ -145,7 +150,11 @@ The `cross-platform-map.json` should contain mapping hints:
 
 **Important**: Before packaging, warn the user about any files that may contain sensitive information (API keys in `.env`, tokens in `auth.json`, etc.) and ask whether to exclude them.
 
-### Step 4: Push to GitHub
+### Step 4: Deliver Export Package
+
+After preparing the migration package, ask the user which delivery method to use:
+
+**Option A: Push to GitHub**
 
 1. Check if `gh` CLI is available. If not, ask the user to install it or provide an alternative approach.
 
@@ -175,6 +184,37 @@ The `cross-platform-map.json` should contain mapping hints:
    - Any warnings about sensitive data
    - Instructions for running import on the target agent
 
+**Option B: Save as Local Zip File**
+
+1. Prompt for output path: "Enter zip file destination path (or press Enter for default: `~/mind-transposition-export-<timestamp>.zip`)"
+
+2. Validate the path:
+   - Check directory exists and is writable
+   - Resolve to absolute path
+   - If file already exists, ask whether to overwrite
+
+3. Create the zip archive:
+   - Use Python's `zipfile` module with `ZIP_DEFLATED` compression
+   - Walk the prepared `mind-transposition-export/` directory
+   - Maintain the directory structure in the zip (no wrapper folder)
+
+4. Verify integrity:
+   - Check that the zip was created successfully
+   - Verify the zip contains expected files (at minimum `manifest.json`)
+
+5. Report to the user:
+   - Final zip file path
+   - File size
+   - Files included (with sizes)
+   - Any warnings about sensitive data
+   - Instructions for running import on the target agent
+
+**Error Handling for Zip Export:**
+- **Disk space:** Check available space before zipping, warn if insufficient
+- **File permissions:** Catch permission errors, suggest alternative location
+- **Large files:** Warn if individual files > 50MB or total package > 500MB
+- **Integrity:** Verify created zip can be opened (zipfile.testzip())
+
 ---
 
 ## Workflow: Import
@@ -183,11 +223,30 @@ The `cross-platform-map.json` should contain mapping hints:
 
 Same detection logic as export. This determines where files will be placed.
 
-### Step 2: Get Source Repository
+### Step 2: Get Source Package (Auto-Detect)
 
-1. Ask for the GitHub repository URL or `owner/repo` identifier
-2. If `MIND_TRANSPOSITION_REPO` is set, offer to use that
-3. Clone the repository to a temporary directory
+Ask the user for the source (GitHub repository or local zip file), then auto-detect the type:
+
+**Detection Logic:**
+```
+if input starts with 'http://' or 'https://' → GitHub URL
+if input matches 'owner/repo' pattern (contains '/') → GitHub repo
+if input is a valid local path ending in '.zip' → Zip file
+if input doesn't match either → Ask: "Is this a GitHub repository or local zip file?"
+```
+
+**If GitHub:**
+1. If `MIND_TRANSPOSITION_REPO` is set, offer to use that
+2. Clone the repository to a temporary directory
+
+**If Zip File:**
+1. Extract to a temporary directory using Python's `zipfile.extractall()`
+2. Validate structure: Check for `manifest.json` at root level
+3. If manifest is missing: Error "Invalid mind transposition package (missing manifest.json)"
+4. Handle zip-specific errors:
+   - `BadZipFile` exception → "Package is corrupted or incomplete"
+   - Version mismatch in manifest → "Package version X not supported (current: Y)"
+   - Path traversal attempts (entries containing `../`) → Reject for security
 
 ### Step 3: Read the Manifest
 
@@ -259,7 +318,7 @@ Show the user what personal files their current agent has:
 
 ## Important Considerations
 
-**Secrets and API keys**: Never upload files containing API keys, tokens, or other secrets to GitHub without explicit user consent. Always warn when `.env`, `auth.json`, `settings.local.json`, or similar files are detected. Default to excluding them.
+**Secrets and API keys**: Never include files containing API keys, tokens, or other secrets without explicit user consent. Always warn when `.env`, `auth.json`, `settings.local.json`, or similar files are detected. Default to excluding them.
 
 **Backup before import**: Always back up the target agent's existing files before overwriting. The user might want to merge rather than replace.
 
@@ -267,6 +326,15 @@ Show the user what personal files their current agent has:
 
 **Git history**: The GitHub repository serves as both a transfer mechanism and a backup. Each export creates a commit, so the user can track how their agent's personality has evolved over time.
 
-**Large files**: If memory or history files are very large (>10MB), warn the user and suggest trimming before export. GitHub has a 100MB file size limit.
+**Large files**: If memory or history files are very large (>10MB), warn the user and suggest trimming before export. GitHub has a 100MB file size limit; zip files may become impractically large beyond 500MB.
 
 **Private vs public repos**: Always default to private repositories. Agent personality files contain information about the user's work patterns, preferences, and potentially sensitive context.
+
+**Zip file security**:
+- Reject zip entries containing `../` to prevent path traversal attacks
+- Verify zip structure before extraction (must contain manifest.json)
+- Warn about suspiciously large files inside the zip (>50MB individual files)
+
+**Delivery method choice**:
+- GitHub: Better for version history, remote access, and sharing between machines
+- Zip: Better for air-gapped environments, quick local backups, or when gh CLI is unavailable
