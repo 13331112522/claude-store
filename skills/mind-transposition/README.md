@@ -10,6 +10,8 @@ Your AI agent develops a unique personality over time — shaped by the skills y
 - **Complete Personality Export**: Captures soul, memory, skills, history, and settings
 - **Intelligent File Mapping**: Automatically adapts files for the target platform's structure
 - **GitHub Integration**: Secure private repository storage and version history
+- **Zip Package Export**: Save agent mind as a local .zip file for air-gapped environments
+- **Auto-Detection Import**: Automatically detects GitHub URLs or local zip files
 - **Backup Protection**: Automatic timestamped backups before import
 - **Security First**: Warns about secrets and sensitive data before export
 
@@ -26,10 +28,15 @@ Your AI agent develops a unique personality over time — shaped by the skills y
 
 Mind Transposition is a two-step process:
 
-1. **Export** — Run on your source agent. It collects all personal files and creates a migration package on GitHub.
-2. **Import** — Run on your target agent. It clones the package, maps files for the target platform, and places them in the correct locations.
+1. **Export** — Run on your source agent. It collects all personal files and delivers them via:
+   - **GitHub repository** — Push to a private GitHub repo (default, requires gh CLI)
+   - **Local zip file** — Package as a downloadable .zip file
 
-The skill auto-detects which platform it's running on and handles all cross-platform file mapping automatically.
+2. **Import** — Run on your target agent. It accepts either:
+   - GitHub repository URL or `owner/repo` identifier
+   - Local zip file path (.zip extension)
+
+The skill auto-detects the source type and platform, handling all cross-platform file mapping automatically.
 
 ## Installation
 
@@ -61,8 +68,14 @@ Copy the `mind-transposition` folder to your platform's skills directory:
 The skill will:
 1. Detect your platform
 2. Collect all personal files (soul, memory, skills, history, settings)
-3. Ask for GitHub repository details (or create a new private one)
-4. Push the migration package to GitHub
+3. Ask for delivery method:
+   - **GitHub**: Ask for repository details (or create a new private one)
+   - **Zip file**: Prompt for output path (default: `~/mind-transposition-export-<timestamp>.zip`)
+4. Create and deliver the migration package
+
+**Delivery Options:**
+- **GitHub** — Better for version history, remote access, and sharing between machines
+- **Zip file** — Better for air-gapped environments, quick local backups, or when gh CLI is unavailable
 
 ### Import a Mind
 
@@ -70,12 +83,18 @@ The skill will:
 /mind-transposition import
 ```
 
-Provide the GitHub repository URL (e.g., `username/agent-mind-backup`), and the skill will:
-1. Detect your platform
-2. Clone the migration package
-3. Map files to your platform's structure
-4. Create a backup of existing files
-5. Place files in the correct locations
+Provide either:
+- GitHub repository URL (e.g., `username/agent-mind-backup` or `https://github.com/username/repo`)
+- Local zip file path (e.g., `~/mind-transposition-export-2025-01-15.zip`)
+
+The skill will:
+1. Auto-detect source type (GitHub or zip file)
+2. Detect your platform
+3. Clone repository or extract zip file
+4. Validate package structure (manifest.json required)
+5. Map files to your platform's structure
+6. Create a backup of existing files
+7. Place files in the correct locations
 
 ### Check Status
 
@@ -131,6 +150,13 @@ mind-transposition-export/
 - **Secret Detection**: Warns about API keys, tokens, and sensitive files
 - **Backup Creation**: Timestamped backups before any file overwrites
 - **User Consent**: Explicit confirmation before excluding sensitive data
+- **Zip File Security**:
+  - Validates zip structure before extraction (must contain manifest.json)
+  - Rejects path traversal attempts (entries containing `../`)
+  - Warns about suspiciously large files inside zip (>50MB)
+- **Delivery Method Choice**:
+  - GitHub: Better for version history and remote access
+  - Zip: Better for air-gapped environments or when gh CLI unavailable
 
 ## Examples
 
@@ -139,29 +165,38 @@ mind-transposition-export/
 ```bash
 # On Claude Code (export)
 /mind-transposition export
-# Creates: github.com/username/claude-code-mind
+# Choose delivery method (GitHub or zip)
 
 # On OpenClaw (import)
 /mind-transposition import
-# Provide: username/claude-code-mind
+# Provide: username/claude-code-mind (or ~/export.zip)
 # Result: CLAUDE.md → SOUL.md, skills mapped correctly
 ```
 
 ### Backup Your Agent Personality
 
 ```bash
+# GitHub backup (version history)
 /mind-transposition export
-# Creates a timestamped backup on GitHub
-# Track personality evolution through git history
+# Choose GitHub → creates private repo with git history
+
+# Local backup (quick, no GitHub account)
+/mind-transposition export
+# Choose Zip → saves to ~/mind-transposition-export-<timestamp>.zip
 ```
 
-### Clone Someone's Agent Setup
+### Share Your Agent Setup
 
 ```bash
-# Share your GitHub repo with someone
-# They run import on their platform
-/mind-transposition import
-# Provide: shared-repo-name
+# Export and share via GitHub
+/mind-transposition export
+# Make GitHub repo public or share with specific users
+
+# Export and share via zip
+/mind-transposition export
+# Choose zip → send the .zip file directly
+# Recipient runs: /mind-transposition import
+# Provides path to the downloaded .zip file
 ```
 
 ## Platform-Specific Notes
@@ -204,7 +239,7 @@ Contributions are welcome! The skill is designed to be extensible:
 
 - **Add Platform Support**: Extend platform detection and file mapping
 - **Improve Mappings**: Enhance cross-platform file conversion
-- **Add Features**: Zip export, encrypted storage, etc.
+- **Add Features**: Encrypted storage, cloud provider integration, etc.
 
 ## License
 
