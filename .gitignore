@@ -26,3 +26,6 @@ dist/
 
 # Exclude promo tweet from repo
 promo-tweet.md
+
+# Git worktrees (isolated development workspaces)
+.worktrees/
