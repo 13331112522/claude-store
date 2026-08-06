@@ -90,8 +90,13 @@ modern and clean design, 3D render
 发送顺序：封面 → MP3 → MD → 播客介绍（文字消息）
 
 ## 火山引擎 TTS 配置
-- APP_ID: 4243287022
-- ACCESS_TOKEN: i2MarDfvjlf0Piv7Zwudu3dt2htyVJr4
+
+运行前需在环境变量中设置火山引擎凭据（请勿在代码或文档中硬编码真实凭据）：
+
+- `VOLC_APP_ID`：火山引擎应用 ID
+- `VOLC_ACCESS_TOKEN`：访问令牌
+- `VOLC_SECRET_KEY`：密钥
+
 - WS_URL: wss://openspeech.bytedance.com/api/v3/sami/podcasttts
 - 发音人：大一先生 + 咪仔同学
 

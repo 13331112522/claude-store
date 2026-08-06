@@ -13,12 +13,14 @@ import argparse
 import ssl
 import struct
 import io
+import os
 from enum import IntEnum
 
-# 配置
-APP_ID = "4243287022"
-ACCESS_TOKEN = "i2MarDfvjlf0Piv7Zwudu3dt2htyVJr4"
-SECRET_KEY = "G1n8DekRMJ-idmr-2bDpoiKS9twV0iqo"
+# 配置 — 从环境变量读取，请勿将真实凭据硬编码提交到仓库
+# 设置方式: VOLC_APP_ID / VOLC_ACCESS_TOKEN / VOLC_SECRET_KEY
+APP_ID = os.environ.get("VOLC_APP_ID", "your_app_id")
+ACCESS_TOKEN = os.environ.get("VOLC_ACCESS_TOKEN", "your_access_token")
+SECRET_KEY = os.environ.get("VOLC_SECRET_KEY", "your_secret_key")
 WS_URL = "wss://openspeech.bytedance.com/api/v3/sami/podcasttts"
 
 # 发音人选项
